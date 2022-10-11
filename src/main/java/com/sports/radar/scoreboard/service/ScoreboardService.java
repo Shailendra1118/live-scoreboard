@@ -11,9 +11,9 @@ public interface ScoreboardService {
 
     Game startGame(Team home, Team away);
 
-    void updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore);
+    Game updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore);
 
-    void finishGame(Team home, Team away);
+    Game finishGame(Team home, Team away);
 
     List<Game> getSummary();
 

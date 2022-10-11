@@ -25,15 +25,13 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     }
 
     @Override
-    public void updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore) {
-        this.scoreboardRepository.updateScore(homeTeam, homeTeamScore, awayTeam, awayTeamScore);
-
+    public Game updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore) {
+        return this.scoreboardRepository.updateScore(homeTeam, homeTeamScore, awayTeam, awayTeamScore);
     }
 
     @Override
-    public void finishGame(Team homeTeam, Team awayTeam) {
-        this.scoreboardRepository.updateStatus(homeTeam, awayTeam, GameState.FINISHED);
-
+    public Game finishGame(Team homeTeam, Team awayTeam) {
+        return this.scoreboardRepository.updateStatus(homeTeam, awayTeam, GameState.FINISHED);
     }
 
     @Override

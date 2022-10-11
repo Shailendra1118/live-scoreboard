@@ -34,15 +34,13 @@ class ScoreboardApplicationTests {
 	}
 
 	@Test
-	public void testNewGameScores() {
+	public void testNewGameInitialScores() {
 		System.out.println("testStartedGame!");
 		Team homeTeam  = Team.builder().name("PSG").playingAs(TeamType.HOME_TEAM).build();
 		Team awayTeam = Team.builder().name("Barcelona").playingAs(TeamType.AWAY_TEAM).build();
 		Game newGame = Game.builder().homeTeam(homeTeam).awayTeam(awayTeam)
 				.currentStatus(GameState.STARTED).build();
 		Mockito.when(scoreboardRepository.addGame(any())).thenReturn(newGame);
-		//Mockito.when(scoreboardRepository.getAllGames()).thenReturn(List.of(newGame));
-
 		Game currentGame = scoreboardService.startGame(homeTeam, awayTeam);
 		assertTrue(currentGame.getHomeTeamScore() == 0);
 		assertTrue(currentGame.getAwayTeamScore() == 0);
@@ -65,18 +63,32 @@ class ScoreboardApplicationTests {
 	}
 
 	@Test
-	public void testGameUpdated() {
+	public void testScoreUpdated() {
 		Team homeTeam = Team.builder().name("Man United").playingAs(TeamType.HOME_TEAM).build();
 		Team awayTeam = Team.builder().name("Man City").playingAs(TeamType.AWAY_TEAM).build();
-		Game newGame = Game.builder().homeTeam(awayTeam).awayTeam(awayTeam)
-				.currentStatus(GameState.STARTED).build();
+		Game newGame = Game.builder().homeTeam(awayTeam).awayTeam(awayTeam).build();
 		Mockito.when(scoreboardRepository.addGame(any())).thenReturn(newGame);
-		Mockito.when(scoreboardRepository.getAllGames()).thenReturn(List.of(newGame));
-		Mockito.when(scoreboardRepository.updateScore(any(), anyInt(), any(), anyInt())).thenReturn(true);
+		Game expected = Game.builder().homeTeamScore(5).awayTeamScore(2).build();
+		Mockito.when(scoreboardRepository.updateScore(any(), anyInt(), any(), anyInt())).thenReturn(expected);
 
-		scoreboardService.updateScore(homeTeam, 0, awayTeam, 3);
-		assertTrue(scoreboardService.getAllGames().get(0).getHomeTeamScore() == 0);
-		assertTrue(scoreboardService.getAllGames().get(0).getAwayTeamScore() == 3);
+		Game game = scoreboardService.updateScore(homeTeam, 5, awayTeam, 2);
+		assertTrue(game.getHomeTeamScore() == 5);
+		assertTrue(game.getAwayTeamScore() == 2);
 	}
+
+	@Test
+	public void testFinishGame() {
+
+		Team homeTeam = Team.builder().name("Man United").playingAs(TeamType.HOME_TEAM).build();
+		Team awayTeam = Team.builder().name("Chelsea").playingAs(TeamType.AWAY_TEAM).build();
+		Game expectedGame = Game.builder().homeTeam(awayTeam).awayTeam(awayTeam)
+				.currentStatus(GameState.FINISHED).build();
+		Mockito.when(scoreboardRepository.updateStatus(any(), any(), any())).thenReturn(expectedGame);
+
+		Game game = scoreboardService.finishGame(homeTeam, awayTeam);
+		assertTrue(game.getCurrentStatus() == GameState.FINISHED);
+
+	}
+
 
 }

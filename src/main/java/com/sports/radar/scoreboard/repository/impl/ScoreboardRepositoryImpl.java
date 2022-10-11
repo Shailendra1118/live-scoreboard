@@ -11,7 +11,11 @@ import java.util.Optional;
 
 public class ScoreboardRepositoryImpl implements ScoreboardRepository {
 
-    //in-memory data
+    //TODO
+    /**
+     * Here we work with DB data objects that further needs to be mapped to Business objects (in service layer)
+     * For simplicity we are keeping Game class object same as corresponding DB object
+     */
     private List<Game> scoreboard = new ArrayList<>();
 
     @Override
@@ -21,22 +25,23 @@ public class ScoreboardRepositoryImpl implements ScoreboardRepository {
     }
 
     @Override
-    public boolean updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore) {
+    public Game updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore) {
         Optional<Game> gameOpt = this.findOngoingGameForTeams(homeTeam, awayTeam);
         if(gameOpt.isPresent()) {
             Game currentGame = gameOpt.get();
             currentGame.setHomeTeamScore(homeTeamScore);
             currentGame.setAwayTeamScore(awayTeamScore);
-            return true;
+            return currentGame;
         }else {
             throw new IllegalArgumentException("No on-going match with these teams.");
         }
     }
 
     @Override
-    public void updateStatus(Team homeTeam, Team awayTeam, GameState status) {
+    public Game updateStatus(Team homeTeam, Team awayTeam, GameState status) {
         Game currentGame = this.findOngoingGameForTeams(homeTeam, awayTeam).orElseThrow(IllegalArgumentException :: new);
         currentGame.setCurrentStatus(status);
+        return currentGame;
     }
 
     @Override
