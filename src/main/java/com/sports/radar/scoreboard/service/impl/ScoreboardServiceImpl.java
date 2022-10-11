@@ -8,6 +8,7 @@ import com.sports.radar.scoreboard.service.ScoreboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -20,7 +21,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     public Game startGame(Team home, Team away) {
         log.info("Starting new game with home team: {} and away team: {}", home, away);
         Game newGame = Game.builder().homeTeam(home).awayTeam(away)
-                .currentStatus(GameState.STARTED).build();
+                .currentStatus(GameState.STARTED).startTime(LocalDateTime.now()).build();
         return this.scoreboardRepository.addGame(newGame);
     }
 

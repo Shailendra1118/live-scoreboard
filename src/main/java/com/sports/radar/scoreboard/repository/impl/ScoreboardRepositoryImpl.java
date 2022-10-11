@@ -25,6 +25,12 @@ public class ScoreboardRepositoryImpl implements ScoreboardRepository {
     }
 
     @Override
+    public List<Game> addGames(List<Game> games) {
+        this.scoreboard.addAll(games);
+        return games;
+    }
+
+    @Override
     public Game updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore) {
         Optional<Game> gameOpt = this.findOngoingGameForTeams(homeTeam, awayTeam);
         if(gameOpt.isPresent()) {

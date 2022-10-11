@@ -10,6 +10,8 @@ public interface ScoreboardRepository {
 
     Game addGame(Game game);
 
+    List<Game> addGames(List<Game> games);
+
     Game updateScore(Team homeTeam, int homeTeamScore, Team awayTeam, int awayTeamScore);
 
     Game updateStatus(Team homeTeam, Team awayTeam, GameState status);
